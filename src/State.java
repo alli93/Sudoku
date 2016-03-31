@@ -2,32 +2,35 @@ import java.util.ArrayList;
 
 public class State {
 	public Grid board;
+	public int numOfNumbers;
 	
 	public class Grid {
-		Variable[][] grid; // grid[row][column]
+		ArrayList<ArrayList<Variable>> grid = new ArrayList<ArrayList<Variable>>();
 		
 		public class Variable {
 			public int domainSize;
 			public int assignment;
-			ArrayList<Integer> validAssignments;
+			ArrayList<Integer> validAssignments = new ArrayList<Integer>();
 			
 			public Variable() {
-				domainSize = grid.length;
+				domainSize = numOfNumbers;
 				assignment = 0;
 				for(int i = 1; i <= domainSize; i++) {
 					validAssignments.add(i);
 				}
 			}
 		}
-		public Grid(){
-			for(int i = 0; i < grid.length; i++) {
-				for(int j = 0; j < grid.length; j++) {
-					grid[i][j] = new Variable();
+		public Grid(int numOfNumbers){
+			for(int i = 0; i < numOfNumbers; i++) {
+				grid.add(new ArrayList<Variable>());
+				for(int j = 0; j < numOfNumbers; j++) {
+					grid.get(i).add(new Variable());
 				}
 			}
 		}
 	}
-	public State() {
-		board = new Grid();
+	public State(int numOfNumbers) {
+		this.numOfNumbers = numOfNumbers;
+		this.board = new Grid(numOfNumbers);
 	}
 }
