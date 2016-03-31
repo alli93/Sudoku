@@ -4,6 +4,7 @@ public class State
 {
 	public Grid board;
 	public int numOfNumbers;
+	public int numOfAssignedVariables = 0;
 
 	public class Grid
 	{
@@ -38,6 +39,12 @@ public class State
 				}
 			}
 		}
+	}
+
+	public void assignVariable(Position pos, int number)
+	{
+		this.board.grid.get(pos.row).get(pos.column).assignment = number;
+		this.numOfAssignedVariables++;
 	}
 
 	public State(int numOfNumbers)

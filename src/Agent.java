@@ -3,50 +3,56 @@ public class Agent
 	private State startState;
 	// Fixed size while developing
 	private int numOfNumbers = 9;
-	
+
 	public void init()
 	{
 		startState = new State(numOfNumbers);
-		
+
 		// Initialize a sudoku puzzle, easy difficulty
 		// Hardcoded until generator is implemented
 		// Link to puzzle: http://www.websudoku.com/?level=1&set_id=9061811194
-		startState.board.grid.get(0).get(1).assignment = 6;
-		startState.board.grid.get(0).get(4).assignment = 2;
-		startState.board.grid.get(0).get(5).assignment = 1;
-		startState.board.grid.get(0).get(6).assignment = 9;		
-		startState.board.grid.get(1).get(0).assignment = 9;
-		startState.board.grid.get(1).get(3).assignment = 7;
-		startState.board.grid.get(1).get(4).assignment = 8;
-		startState.board.grid.get(1).get(5).assignment = 4;	
-		startState.board.grid.get(2).get(0).assignment = 4;
-		startState.board.grid.get(2).get(1).assignment = 1;
-		startState.board.grid.get(2).get(4).assignment = 5;
-		startState.board.grid.get(2).get(8).assignment = 3;	
-		startState.board.grid.get(3).get(0).assignment = 6;
-		startState.board.grid.get(3).get(3).assignment = 8;
-		startState.board.grid.get(3).get(6).assignment = 3;
-		startState.board.grid.get(3).get(7).assignment = 9;		
-		startState.board.grid.get(4).get(2).assignment = 9;
-		startState.board.grid.get(4).get(6).assignment = 5;		
-		startState.board.grid.get(5).get(1).assignment = 5;
-		startState.board.grid.get(5).get(2).assignment = 3;
-		startState.board.grid.get(5).get(5).assignment = 7;
-		startState.board.grid.get(5).get(8).assignment = 8;
-		startState.board.grid.get(6).get(0).assignment = 3;
-		startState.board.grid.get(6).get(4).assignment = 9;
-		startState.board.grid.get(6).get(7).assignment = 5;
-		startState.board.grid.get(6).get(8).assignment = 2;
-		startState.board.grid.get(7).get(3).assignment = 2;
-		startState.board.grid.get(7).get(4).assignment = 4;
-		startState.board.grid.get(7).get(5).assignment = 8;
-		startState.board.grid.get(7).get(8).assignment = 1;	
-		startState.board.grid.get(8).get(2).assignment = 1;
-		startState.board.grid.get(8).get(3).assignment = 5;
-		startState.board.grid.get(8).get(4).assignment = 7;
-		startState.board.grid.get(8).get(7).assignment = 4;
-		
+		startState.assignVariable(new Position(0, 1), 6);
+		startState.assignVariable(new Position(0, 4), 2);
+		startState.assignVariable(new Position(0, 5), 1);
+		startState.assignVariable(new Position(0, 6), 9);
+		startState.assignVariable(new Position(1, 0), 9);
+		startState.assignVariable(new Position(1, 3), 7);
+		startState.assignVariable(new Position(1, 4), 8);
+		startState.assignVariable(new Position(1, 5), 4);
+		startState.assignVariable(new Position(2, 0), 4);
+		startState.assignVariable(new Position(2, 1), 1);
+		startState.assignVariable(new Position(2, 4), 5);
+		startState.assignVariable(new Position(2, 8), 3);
+		startState.assignVariable(new Position(3, 0), 6);
+		startState.assignVariable(new Position(3, 3), 8);
+		startState.assignVariable(new Position(3, 6), 3);
+		startState.assignVariable(new Position(3, 7), 9);
+		startState.assignVariable(new Position(4, 2), 9);
+		startState.assignVariable(new Position(4, 6), 5);
+		startState.assignVariable(new Position(5, 1), 5);
+		startState.assignVariable(new Position(5, 2), 3);
+		startState.assignVariable(new Position(5, 5), 7);
+		startState.assignVariable(new Position(5, 8), 8);
+		startState.assignVariable(new Position(6, 0), 3);
+		startState.assignVariable(new Position(6, 4), 9);
+		startState.assignVariable(new Position(6, 7), 5);
+		startState.assignVariable(new Position(6, 8), 2);
+		startState.assignVariable(new Position(7, 3), 2);
+		startState.assignVariable(new Position(7, 4), 4);
+		startState.assignVariable(new Position(7, 5), 8);
+		startState.assignVariable(new Position(7, 8), 1);
+		startState.assignVariable(new Position(8, 2), 1);
+		startState.assignVariable(new Position(8, 3), 5);
+		startState.assignVariable(new Position(8, 4), 7);
+		startState.assignVariable(new Position(8, 7), 4);
+
 		System.out.println(startState);
-		
+
 	}
+
+	public void solvePuzzle()
+	{
+		// TODO: Implement search
+	}
+
 }
