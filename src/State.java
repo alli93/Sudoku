@@ -60,9 +60,13 @@ public class State
 		{
 			for (int j = 0; j < numOfNumbers; ++j)
 			{
-
-				board.append("| " + this.board.grid.get(i).get(j).assignment + " ");
-
+				if (this.board.grid.get(i).get(j).assignment == 0)
+				{
+					board.append("|   ");
+				} else
+				{
+					board.append("| " + this.board.grid.get(i).get(j).assignment + " ");
+				}
 			}
 			board.append("| \n");
 			if (i != 0)
