@@ -53,6 +53,47 @@ public class State
 		this.board = new Grid(numOfNumbers);
 	}
 
+	public boolean isValidAssignment(Position pos, int number)
+	{
+
+		// Check if the row already contains the number
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			if (board.grid.get(pos.row).get(i).assignment == number)
+			{
+				return false;
+			}
+		}
+
+		// Check if the column already contains the number
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			if (board.grid.get(i).get(pos.column).assignment == number)
+			{
+				return false;
+			}
+		}
+
+		// Check if the subgrid already contains the number
+		int numOfRowsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int numOfColumnsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int subgridColumn = (pos.column / numOfColumnsInSubgrid) * numOfColumnsInSubgrid;
+		int subgridRow = (pos.row / numOfRowsInSubgrid) * numOfRowsInSubgrid;
+
+		for (int i = 0; i < numOfRowsInSubgrid; i++)
+		{
+			for (int j = 0; j < numOfColumnsInSubgrid; j++)
+			{
+				if (board.grid.get(i + subgridRow).get(j + subgridColumn).assignment == number)
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 	public boolean isGoalState()
 	{
 		return numOfAssignedVariables == (numOfNumbers * numOfNumbers);
