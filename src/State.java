@@ -53,6 +53,11 @@ public class State
 		this.board = new Grid(numOfNumbers);
 	}
 
+	public boolean isGoalState()
+	{
+		return numOfAssignedVariables == (numOfNumbers * numOfNumbers);
+	}
+
 	@Override
 	public String toString()
 	{
