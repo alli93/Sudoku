@@ -92,12 +92,12 @@ public class State
 				if (this.board.grid.get(i).get(j).assignment == 0
 						&& this.board.grid.get(i).get(j).validAssignments.isEmpty())
 				{
-					return false;
+					return true;
 				}
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	public boolean isGoalState()
