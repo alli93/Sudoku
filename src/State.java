@@ -45,17 +45,22 @@ public class State
 		this.board.grid.get(pos.row).get(pos.column).assignment = number;
 		this.numOfAssignedVariables++;
 
-
 		// Update the valid assignments of all the variables in the same row
 		for (int i = 0; i < this.numOfNumbers; i++)
 		{
-			board.grid.get(pos.row).get(i).validAssignments.remove(new Integer(number));
+			if (board.grid.get(pos.row).get(i).validAssignments.remove(new Integer(number)))
+			{
+				cellsChangedInForwardChecking.add(new Position(pos.row, i));
+			}
 		}
 
 		// Update the valid assignments of all the variables in the same column
 		for (int i = 0; i < this.numOfNumbers; i++)
 		{
-			board.grid.get(i).get(pos.column).validAssignments.remove(new Integer(number));
+			if (board.grid.get(i).get(pos.column).validAssignments.remove(new Integer(number)))
+			{
+				cellsChangedInForwardChecking.add(new Position(i, pos.column));
+			}
 		}
 
 		// Check if the subgrid already contains the number
@@ -68,13 +73,13 @@ public class State
 		{
 			for (int j = 0; j < numOfColumnsInSubgrid; j++)
 			{
-				board.grid.get(i + subgridRow).get(j + subgridColumn).validAssignments.remove(new Integer(number));
+				if (board.grid.get(i + subgridRow).get(j + subgridColumn).validAssignments.remove(new Integer(number)))
+				{
+					cellsChangedInForwardChecking.add(new Position(i + subgridRow, j + subgridColumn));
+				}
 			}
 		}
-
 	}
-	
-	
 
 	public State(int numOfNumbers)
 	{
