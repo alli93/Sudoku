@@ -42,7 +42,10 @@ public class State
 
 	public void assignVariable(Position pos, int number)
 	{
+		// Assign the number to the cell
 		this.board.grid.get(pos.row).get(pos.column).assignment = number;
+		
+		// Update the number of assigned variables
 		this.numOfAssignedVariables++;
 
 		// Update the valid assignments of all the variables in the same row
@@ -78,6 +81,21 @@ public class State
 					cellsChangedInForwardChecking.add(new Position(i + subgridRow, j + subgridColumn));
 				}
 			}
+		}
+	}
+
+	public void unAssignVariable(Position pos, int number)
+	{
+		Position cellPos;
+		
+		// Remove the assignment from the cell
+		this.board.grid.get(pos.row).get(pos.column).assignment = 0;
+		
+		// Update the variables that valid assignments changed due to the variable being assigned
+		for (int i = 0; i < cellsChangedInForwardChecking.size(); i++)
+		{
+			cellPos = cellsChangedInForwardChecking.get(i);
+			this.board.grid.get(cellPos.row).get(cellPos.column).validAssignments.add(number);
 		}
 	}
 
