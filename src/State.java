@@ -81,7 +81,24 @@ public class State
 		this.board = new Grid(numOfNumbers);
 	}
 
-	
+	public boolean unassignedVariableHasAnEmptyDomain()
+	{
+
+		// Check if any variable has an empty domain
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			for (int j = 0; j < this.numOfNumbers; j++)
+			{
+				if (this.board.grid.get(i).get(j).assignment == 0
+						&& this.board.grid.get(i).get(j).validAssignments.isEmpty())
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
 
 	public boolean isGoalState()
 	{
