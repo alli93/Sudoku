@@ -110,7 +110,7 @@ public class State
 			for (int j = 0; j < numOfNumbers; j++)
 			{
 				// Find the most constrained variable that is unassigned
-				if ((this.board.grid.get(i).get(j).validAssignments.size() < minValidAssignments) && (this.board.grid.get(i).get(j).assignment != 0))
+				if ((this.board.grid.get(i).get(j).validAssignments.size() < minValidAssignments) && (this.board.grid.get(i).get(j).assignment == 0))
 				{
 					minValidAssignments = this.board.grid.get(i).get(j).validAssignments.size();
 					mostConstrained.row = i;
