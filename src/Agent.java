@@ -50,9 +50,21 @@ public class Agent
 
 	}
 
-	public void solvePuzzle()
+	public State solvePuzzle()
 	{
-		// TODO: Implement search
+		State solution = csp_backtracking(startState);
+		return solution;
+	}
+
+	public State csp_backtracking(State currentState)
+	{
+		if (currentState.isGoalState())
+		{
+			return currentState;
+		}
+		
+		
+		return currentState;
 	}
 
 }
