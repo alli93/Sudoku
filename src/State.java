@@ -44,7 +44,7 @@ public class State
 	{
 		// Assign the number to the cell
 		this.board.grid.get(pos.row).get(pos.column).assignment = number;
-		
+
 		// Update the number of assigned variables
 		this.numOfAssignedVariables++;
 
@@ -87,16 +87,39 @@ public class State
 	public void unAssignVariable(Position pos, int number)
 	{
 		Position cellPos;
-		
+
 		// Remove the assignment from the cell
 		this.board.grid.get(pos.row).get(pos.column).assignment = 0;
-		
-		// Update the variables that valid assignments changed due to the variable being assigned
+
+		// Update the variables that valid assignments changed due to the
+		// variable being assigned
 		for (int i = 0; i < cellsChangedInForwardChecking.size(); i++)
 		{
 			cellPos = cellsChangedInForwardChecking.get(i);
 			this.board.grid.get(cellPos.row).get(cellPos.column).validAssignments.add(number);
 		}
+	}
+
+	public Position positionOfMostConstrainedVariable()
+	{
+		Position mostConstrained = new Position(0, 0);
+		int minValidAssignments = Integer.MAX_VALUE;
+
+		for (int i = 0; i < numOfNumbers; i++)
+		{
+			for (int j = 0; j < numOfNumbers; j++)
+			{
+				// Find the most constrained variable that is unassigned
+				if ((this.board.grid.get(i).get(j).validAssignments.size() < minValidAssignments) && (this.board.grid.get(i).get(j).assignment != 0))
+				{
+					minValidAssignments = this.board.grid.get(i).get(j).validAssignments.size();
+					mostConstrained.row = i;
+					mostConstrained.column = j;
+				}
+			}
+		}
+
+		return mostConstrained;
 	}
 
 	public State(int numOfNumbers)
