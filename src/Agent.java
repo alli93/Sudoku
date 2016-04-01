@@ -58,10 +58,15 @@ public class Agent
 
 	public State csp_backtracking(State currentState)
 	{
+		// Check if the current state is goal state
 		if (currentState.isGoalState())
 		{
 			return currentState;
 		}
+		
+		// Get the position of the most constrained variable
+		Position posOfMostConstrainedVariable = currentState.positionOfMostConstrainedVariable();
+		
 		
 		
 		return currentState;
