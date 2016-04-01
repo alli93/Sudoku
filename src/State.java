@@ -5,6 +5,7 @@ public class State
 	public Grid board;
 	public int numOfNumbers;
 	public int numOfAssignedVariables = 0;
+	public ArrayList<Position> cellsChangedInForwardChecking = new ArrayList<Position>();
 
 	public class Grid
 	{
@@ -44,8 +45,6 @@ public class State
 		this.board.grid.get(pos.row).get(pos.column).assignment = number;
 		this.numOfAssignedVariables++;
 
-		// Remove all valid assignment for the cell being assigned
-		board.grid.get(pos.row).get(pos.column).validAssignments.clear();
 
 		// Update the valid assignments of all the variables in the same row
 		for (int i = 0; i < this.numOfNumbers; i++)
@@ -74,6 +73,8 @@ public class State
 		}
 
 	}
+	
+	
 
 	public State(int numOfNumbers)
 	{
@@ -83,7 +84,6 @@ public class State
 
 	public boolean unassignedVariableHasAnEmptyDomain()
 	{
-
 		// Check if any variable has an empty domain
 		for (int i = 0; i < this.numOfNumbers; i++)
 		{
