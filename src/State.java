@@ -12,15 +12,13 @@ public class State
 
 		public class Variable
 		{
-			public int domainSize;
 			public int assignment;
 			ArrayList<Integer> validAssignments = new ArrayList<Integer>();
 
 			public Variable()
 			{
-				domainSize = numOfNumbers;
 				assignment = 0;
-				for (int i = 1; i <= domainSize; i++)
+				for (int i = 1; i <= numOfNumbers; i++)
 				{
 					validAssignments.add(i);
 				}
@@ -45,6 +43,36 @@ public class State
 	{
 		this.board.grid.get(pos.row).get(pos.column).assignment = number;
 		this.numOfAssignedVariables++;
+
+		// Remove all valid assignment for the cell being assigned
+		board.grid.get(pos.row).get(pos.column).validAssignments.clear();
+
+		// Update the valid assignments of all the variables in the same row
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			board.grid.get(pos.row).get(i).validAssignments.remove(new Integer(number));
+		}
+
+		// Update the valid assignments of all the variables in the same column
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			board.grid.get(i).get(pos.column).validAssignments.remove(new Integer(number));
+		}
+
+		// Check if the subgrid already contains the number
+		int numOfRowsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int numOfColumnsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int subgridColumn = (pos.column / numOfColumnsInSubgrid) * numOfColumnsInSubgrid;
+		int subgridRow = (pos.row / numOfRowsInSubgrid) * numOfRowsInSubgrid;
+
+		for (int i = 0; i < numOfRowsInSubgrid; i++)
+		{
+			for (int j = 0; j < numOfColumnsInSubgrid; j++)
+			{
+				board.grid.get(i + subgridRow).get(j + subgridColumn).validAssignments.remove(new Integer(number));
+			}
+		}
+
 	}
 
 	public State(int numOfNumbers)
