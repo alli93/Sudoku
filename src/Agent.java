@@ -2,8 +2,11 @@ import java.util.ArrayList;
 
 public class Agent
 {
-	private State startState;
-	private State startState2;
+	private State puzzle9x9Easy;
+	private State puzzle9x9Evil;
+	private State puzzle4x4Hard;
+	private State puzzleToSolve;
+
 	// Fixed size while developing
 	private int numOfNumbers = 9;
 
@@ -12,69 +15,104 @@ public class Agent
 
 	public void init()
 	{
-		startState = new State(numOfNumbers);
-		startState2 = new State(numOfNumbers2);
+		puzzle9x9Easy = new State(numOfNumbers);
+		puzzle4x4Hard = new State(numOfNumbers2);
+		puzzle9x9Evil = new State(numOfNumbers);
 
-		// Initialize a sudoku puzzle, easy difficulty
-		// Hardcoded until generator is implemented
+		// Initialize a 9x9 sudoku puzzle, easy difficulty
 		// Link to puzzle: http://www.websudoku.com/?level=1&set_id=9061811194
-		startState.assignVariable(new Position(0, 1), 6);
-		startState.assignVariable(new Position(0, 4), 2);
-		startState.assignVariable(new Position(0, 5), 1);
-		startState.assignVariable(new Position(0, 6), 9);
-		startState.assignVariable(new Position(1, 0), 9);
-		startState.assignVariable(new Position(1, 3), 7);
-		startState.assignVariable(new Position(1, 4), 8);
-		startState.assignVariable(new Position(1, 5), 4);
-		startState.assignVariable(new Position(2, 0), 4);
-		startState.assignVariable(new Position(2, 1), 1);
-		startState.assignVariable(new Position(2, 4), 5);
-		startState.assignVariable(new Position(2, 8), 3);
-		startState.assignVariable(new Position(3, 0), 6);
-		startState.assignVariable(new Position(3, 3), 8);
-		startState.assignVariable(new Position(3, 6), 3);
-		startState.assignVariable(new Position(3, 7), 9);
-		startState.assignVariable(new Position(4, 2), 9);
-		startState.assignVariable(new Position(4, 6), 5);
-		startState.assignVariable(new Position(5, 1), 5);
-		startState.assignVariable(new Position(5, 2), 3);
-		startState.assignVariable(new Position(5, 5), 7);
-		startState.assignVariable(new Position(5, 8), 8);
-		startState.assignVariable(new Position(6, 0), 3);
-		startState.assignVariable(new Position(6, 4), 9);
-		startState.assignVariable(new Position(6, 7), 5);
-		startState.assignVariable(new Position(6, 8), 2);
-		startState.assignVariable(new Position(7, 3), 2);
-		startState.assignVariable(new Position(7, 4), 4);
-		startState.assignVariable(new Position(7, 5), 8);
-		startState.assignVariable(new Position(7, 8), 1);
-		startState.assignVariable(new Position(8, 2), 1);
-		startState.assignVariable(new Position(8, 3), 5);
-		startState.assignVariable(new Position(8, 4), 7);
-		startState.assignVariable(new Position(8, 7), 4);
-		startState.cellsChangedInForwardChecking.clear();
+		puzzle9x9Easy.assignVariable(new Position(0, 1), 6);
+		puzzle9x9Easy.assignVariable(new Position(0, 4), 2);
+		puzzle9x9Easy.assignVariable(new Position(0, 5), 1);
+		puzzle9x9Easy.assignVariable(new Position(0, 6), 9);
+		puzzle9x9Easy.assignVariable(new Position(1, 0), 9);
+		puzzle9x9Easy.assignVariable(new Position(1, 3), 7);
+		puzzle9x9Easy.assignVariable(new Position(1, 4), 8);
+		puzzle9x9Easy.assignVariable(new Position(1, 5), 4);
+		puzzle9x9Easy.assignVariable(new Position(2, 0), 4);
+		puzzle9x9Easy.assignVariable(new Position(2, 1), 1);
+		puzzle9x9Easy.assignVariable(new Position(2, 4), 5);
+		puzzle9x9Easy.assignVariable(new Position(2, 8), 3);
+		puzzle9x9Easy.assignVariable(new Position(3, 0), 6);
+		puzzle9x9Easy.assignVariable(new Position(3, 3), 8);
+		puzzle9x9Easy.assignVariable(new Position(3, 6), 3);
+		puzzle9x9Easy.assignVariable(new Position(3, 7), 9);
+		puzzle9x9Easy.assignVariable(new Position(4, 2), 9);
+		puzzle9x9Easy.assignVariable(new Position(4, 6), 5);
+		puzzle9x9Easy.assignVariable(new Position(5, 1), 5);
+		puzzle9x9Easy.assignVariable(new Position(5, 2), 3);
+		puzzle9x9Easy.assignVariable(new Position(5, 5), 7);
+		puzzle9x9Easy.assignVariable(new Position(5, 8), 8);
+		puzzle9x9Easy.assignVariable(new Position(6, 0), 3);
+		puzzle9x9Easy.assignVariable(new Position(6, 4), 9);
+		puzzle9x9Easy.assignVariable(new Position(6, 7), 5);
+		puzzle9x9Easy.assignVariable(new Position(6, 8), 2);
+		puzzle9x9Easy.assignVariable(new Position(7, 3), 2);
+		puzzle9x9Easy.assignVariable(new Position(7, 4), 4);
+		puzzle9x9Easy.assignVariable(new Position(7, 5), 8);
+		puzzle9x9Easy.assignVariable(new Position(7, 8), 1);
+		puzzle9x9Easy.assignVariable(new Position(8, 2), 1);
+		puzzle9x9Easy.assignVariable(new Position(8, 3), 5);
+		puzzle9x9Easy.assignVariable(new Position(8, 4), 7);
+		puzzle9x9Easy.assignVariable(new Position(8, 7), 4);
+		puzzle9x9Easy.cellsChangedInForwardChecking.clear();
 
-		startState2.assignVariable(new Position(0, 0), 3);
-		startState2.assignVariable(new Position(1, 1), 4);
-		startState2.assignVariable(new Position(2, 2), 2);
-		startState2.assignVariable(new Position(3, 1), 3);
-		startState2.assignVariable(new Position(3, 3), 1);
-		startState2.cellsChangedInForwardChecking.clear();
+		// Initialize a 4x4 sudoku puzzle, hard difficulty
+		puzzle4x4Hard.assignVariable(new Position(0, 0), 3);
+		puzzle4x4Hard.assignVariable(new Position(1, 1), 4);
+		puzzle4x4Hard.assignVariable(new Position(2, 2), 2);
+		puzzle4x4Hard.assignVariable(new Position(3, 1), 3);
+		puzzle4x4Hard.assignVariable(new Position(3, 3), 1);
+		puzzle4x4Hard.cellsChangedInForwardChecking.clear();
 
+		// Initialize a 9x9 sudoku puzzle, evil difficulty
+		// Link to puzzle: http://www.websudoku.com/?level=4&set_id=8426889781
+		puzzle9x9Evil.assignVariable(new Position(0, 0), 3);
+		puzzle9x9Evil.assignVariable(new Position(0, 2), 5);
+		puzzle9x9Evil.assignVariable(new Position(0, 4), 8);
+		puzzle9x9Evil.assignVariable(new Position(1, 4), 1);
+		puzzle9x9Evil.assignVariable(new Position(1, 7), 8);
+		puzzle9x9Evil.assignVariable(new Position(2, 2), 2);
+		puzzle9x9Evil.assignVariable(new Position(2, 5), 7);
+		puzzle9x9Evil.assignVariable(new Position(2, 7), 6);
+		puzzle9x9Evil.assignVariable(new Position(3, 2), 9);
+		puzzle9x9Evil.assignVariable(new Position(3, 3), 3);
+		puzzle9x9Evil.assignVariable(new Position(3, 6), 5);
+		puzzle9x9Evil.assignVariable(new Position(4, 1), 3);
+		puzzle9x9Evil.assignVariable(new Position(4, 4), 7);
+		puzzle9x9Evil.assignVariable(new Position(4, 7), 2);
+		puzzle9x9Evil.assignVariable(new Position(5, 2), 8);
+		puzzle9x9Evil.assignVariable(new Position(5, 5), 4);
+		puzzle9x9Evil.assignVariable(new Position(5, 6), 1);
+		puzzle9x9Evil.assignVariable(new Position(6, 1), 2);
+		puzzle9x9Evil.assignVariable(new Position(6, 3), 1);
+		puzzle9x9Evil.assignVariable(new Position(6, 6), 9);
+		puzzle9x9Evil.assignVariable(new Position(7, 1), 9);
+		puzzle9x9Evil.assignVariable(new Position(7, 4), 3);
+		puzzle9x9Evil.assignVariable(new Position(8, 4), 6);
+		puzzle9x9Evil.assignVariable(new Position(8, 6), 4);
+		puzzle9x9Evil.assignVariable(new Position(8, 8), 3);
+		puzzle9x9Evil.cellsChangedInForwardChecking.clear();
 	}
 
 	public State solvePuzzle()
 	{
-		if(puzzleNumber == 1)
+		if (puzzleNumber == 1)
 		{
-			startState = startState2;
+			puzzleToSolve = puzzle4x4Hard;
+		} else if (puzzleNumber == 2)
+		{
+			puzzleToSolve = puzzle9x9Easy;
+		} else
+		{
+			puzzleToSolve = puzzle9x9Evil;
 		}
-		
+
 		System.out.println("Puzzle:");
-		System.out.println(startState);
+		System.out.println(puzzleToSolve);
 		System.out.println();
-		State solution = csp_backtracking(startState);
-	
+		State solution = csp_backtracking(puzzleToSolve);
+
 		return solution;
 	}
 
@@ -99,6 +137,7 @@ public class Agent
 			result.cellsChangedInForwardChecking.clear();
 			result.assignVariable(posOfMostConstrainedVariable, values.get(i));
 
+			currentState.cellsChangedInForwardChecking.clear();
 			// Add value to variable and do forward checking
 			currentState.assignVariable(posOfMostConstrainedVariable, values.get(i));
 
@@ -120,5 +159,4 @@ public class Agent
 	{
 		this.puzzleNumber = number;
 	}
-
 }
