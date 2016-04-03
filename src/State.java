@@ -84,6 +84,60 @@ public class State
 		}
 	}
 
+	public int numOfValuesRemovedByAssignment(Position pos, int number)
+	{
+		int numOfValuesRemoved = 0;
+
+		ArrayList<Position> alreadyVisited = new ArrayList<Position>();
+
+		// Update the valid assignments of all the variables in the same row
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			if (board.grid.get(pos.row).get(i).validAssignments.contains(new Integer(number))
+					&& board.grid.get(pos.row).get(i).assignment == 0
+					&& !alreadyVisited.contains(new Position(pos.row, i)))
+			{
+				numOfValuesRemoved++;
+				alreadyVisited.add(new Position(pos.row, i));
+			}
+
+		}
+
+		// Update the valid assignments of all the variables in the same column
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			if (board.grid.get(i).get(pos.column).validAssignments.contains(new Integer(number))
+					&& board.grid.get(i).get(pos.column).assignment == 0
+					&& !alreadyVisited.contains(new Position(i, pos.column)))
+			{
+				numOfValuesRemoved++;
+				alreadyVisited.add(new Position(i, pos.column));
+			}
+		}
+
+		// Check if the subgrid already contains the number
+		int numOfRowsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int numOfColumnsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int subgridColumn = (pos.column / numOfColumnsInSubgrid) * numOfColumnsInSubgrid;
+		int subgridRow = (pos.row / numOfRowsInSubgrid) * numOfRowsInSubgrid;
+
+		for (int i = 0; i < numOfRowsInSubgrid; i++)
+		{
+			for (int j = 0; j < numOfColumnsInSubgrid; j++)
+			{
+				if (board.grid.get(i + subgridRow).get(j + subgridColumn).validAssignments.contains(new Integer(number))
+						&& board.grid.get(i + subgridRow).get(j + subgridColumn).assignment == 0
+						&& !alreadyVisited.contains(new Position(i + subgridRow, j + subgridColumn)))
+				{
+					numOfValuesRemoved++;
+					alreadyVisited.add(new Position(i + subgridRow, j + subgridColumn));
+				}
+			}
+		}
+
+		return numOfValuesRemoved;
+	}
+
 	public void unAssignVariable(Position pos, int number)
 	{
 		Position cellPos;
@@ -110,7 +164,8 @@ public class State
 			for (int j = 0; j < numOfNumbers; j++)
 			{
 				// Find the most constrained variable that is unassigned
-				if ((this.board.grid.get(i).get(j).validAssignments.size() < minValidAssignments) && (this.board.grid.get(i).get(j).assignment == 0))
+				if ((this.board.grid.get(i).get(j).validAssignments.size() < minValidAssignments)
+						&& (this.board.grid.get(i).get(j).assignment == 0))
 				{
 					minValidAssignments = this.board.grid.get(i).get(j).validAssignments.size();
 					mostConstrained.row = i;
@@ -120,6 +175,27 @@ public class State
 		}
 
 		return mostConstrained;
+	}
+
+	// Returns a list, ordered by least-constraining values
+	public ArrayList<Integer> leastConstrainingValues(Position pos)
+	{
+		ArrayList<Integer> leastConstrainingValues = new ArrayList<Integer>();
+		ArrayList<Integer> validAssignments = this.board.grid.get(pos.row).get(pos.column).validAssignments;
+		ArrayList<Integer> numOfValuesRemoved = new ArrayList<Integer>();
+
+		// Initialize numOfValuesRemoved with zeros
+		for (int i = 0; i < numOfNumbers; i++)
+		{
+			numOfValuesRemoved.add(0);
+		}
+
+		for (int i = 0; i < validAssignments.size(); i++)
+		{
+			validAssignments.get(i);
+		}
+
+		return leastConstrainingValues;
 	}
 
 	public State(int numOfNumbers)
