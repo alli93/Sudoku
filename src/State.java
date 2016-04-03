@@ -183,6 +183,7 @@ public class State
 		ArrayList<Integer> leastConstrainingValues = new ArrayList<Integer>();
 		ArrayList<Integer> validAssignments = this.board.grid.get(pos.row).get(pos.column).validAssignments;
 		ArrayList<Integer> numOfValuesRemoved = new ArrayList<Integer>();
+		int currentNumber = 0;
 
 		// Initialize numOfValuesRemoved with zeros
 		for (int i = 0; i < numOfNumbers; i++)
@@ -190,9 +191,29 @@ public class State
 			numOfValuesRemoved.add(0);
 		}
 
+		// Find the number of values removed by each valid assignment
 		for (int i = 0; i < validAssignments.size(); i++)
 		{
-			validAssignments.get(i);
+			currentNumber = validAssignments.get(i);
+			numOfValuesRemoved.set(currentNumber - 1, numOfValuesRemovedByAssignment(pos, currentNumber));
+		}
+
+		int currentMinValuesRemoved = Integer.MAX_VALUE;
+		int currentMinValue = 0;
+
+		for (int i = 0; i < validAssignments.size(); i++)
+		{
+			for (int j = 0; j < validAssignments.size(); j++)
+			{
+				if (numOfValuesRemoved.get(validAssignments.get(j) - 1) < currentMinValuesRemoved)
+				{
+					currentMinValuesRemoved = numOfValuesRemoved.get(validAssignments.get(j) - 1);
+					currentMinValue = validAssignments.get(j);
+				}
+			}
+			leastConstrainingValues.add(currentMinValue);
+			numOfValuesRemoved.set(currentMinValue - 1, Integer.MAX_VALUE);
+			currentMinValuesRemoved = Integer.MAX_VALUE;
 		}
 
 		return leastConstrainingValues;
