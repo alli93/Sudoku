@@ -6,11 +6,11 @@ public class Agent
 	private State puzzle9x9Evil;
 	private State puzzle4x4Hard;
 	private State puzzleToSolve;
-
-	// Fixed size while developing
+	
 	private int numOfNumbers = 9;
-
 	private int numOfNumbers2 = 4;
+	
+	// Default value
 	private int puzzleNumber = 1;
 
 	public void init()
