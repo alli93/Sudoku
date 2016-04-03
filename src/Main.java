@@ -7,6 +7,7 @@ public class Main
 		Agent agent = new Agent();
 		agent.init();
 		State solution = agent.solvePuzzle();
+		System.out.println("Solution:");
 		System.out.println(solution);
 
 	}
