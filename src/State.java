@@ -7,6 +7,32 @@ public class State
 	public int numOfAssignedVariables = 0;
 	public ArrayList<Position> cellsChangedInForwardChecking = new ArrayList<Position>();
 
+	public State(int numberOfNumbers)
+	{
+		numOfNumbers = numberOfNumbers;
+		board = new Grid(numOfNumbers);
+	}
+
+	public static State newInstance(State oldstate)
+	{
+		State newState = new State(oldstate.numOfNumbers);
+
+		for (int i = 0; i < oldstate.board.grid.size(); i++)
+		{
+			for (int j = 0; j < oldstate.numOfNumbers; j++)
+			{
+				newState.board.grid.get(i).set(j, oldstate.board.grid.get(i).get(j).newInstance(oldstate.board.grid.get(i).get(j)));
+			}
+		}
+		newState.numOfNumbers = oldstate.numOfNumbers;
+		newState.numOfAssignedVariables = oldstate.numOfAssignedVariables;
+		for (int i = 0; i < oldstate.cellsChangedInForwardChecking.size(); i++)
+		{
+			newState.cellsChangedInForwardChecking.add(oldstate.cellsChangedInForwardChecking.get(i));
+		}
+		return newState;
+	}
+
 	public class Grid
 	{
 		ArrayList<ArrayList<Variable>> grid = new ArrayList<ArrayList<Variable>>();
@@ -23,6 +49,21 @@ public class State
 				{
 					validAssignments.add(i);
 				}
+			}
+
+			public Variable newInstance(Variable oldVariable)
+			{
+				Variable newVariable = new Variable();
+				newVariable.validAssignments.clear();
+				
+				newVariable.assignment = oldVariable.assignment;
+				for (int i = 0; i < oldVariable.validAssignments.size(); i++)
+				{
+					int currenAssignment = oldVariable.validAssignments.get(i);
+					newVariable.validAssignments.add(currenAssignment);
+				}
+				
+				return newVariable;
 			}
 
 		}
@@ -51,7 +92,8 @@ public class State
 		// Update the valid assignments of all the variables in the same row
 		for (int i = 0; i < this.numOfNumbers; i++)
 		{
-			if (board.grid.get(pos.row).get(i).validAssignments.remove(new Integer(number)))
+			if (board.grid.get(pos.row).get(i).assignment == 0
+					&& board.grid.get(pos.row).get(i).validAssignments.remove(new Integer(number)))
 			{
 				cellsChangedInForwardChecking.add(new Position(pos.row, i));
 			}
@@ -60,7 +102,8 @@ public class State
 		// Update the valid assignments of all the variables in the same column
 		for (int i = 0; i < this.numOfNumbers; i++)
 		{
-			if (board.grid.get(i).get(pos.column).validAssignments.remove(new Integer(number)))
+			if (board.grid.get(i).get(pos.column).assignment == 0
+					&& board.grid.get(i).get(pos.column).validAssignments.remove(new Integer(number)))
 			{
 				cellsChangedInForwardChecking.add(new Position(i, pos.column));
 			}
@@ -76,7 +119,9 @@ public class State
 		{
 			for (int j = 0; j < numOfColumnsInSubgrid; j++)
 			{
-				if (board.grid.get(i + subgridRow).get(j + subgridColumn).validAssignments.remove(new Integer(number)))
+				if (board.grid.get(i + subgridRow).get(j + subgridColumn).assignment == 0
+						&& board.grid.get(i + subgridRow).get(j + subgridColumn).validAssignments
+								.remove(new Integer(number)))
 				{
 					cellsChangedInForwardChecking.add(new Position(i + subgridRow, j + subgridColumn));
 				}
@@ -141,6 +186,8 @@ public class State
 	public void unAssignVariable(Position pos, int number)
 	{
 		Position cellPos;
+
+		this.numOfAssignedVariables--;
 
 		// Remove the assignment from the cell
 		this.board.grid.get(pos.row).get(pos.column).assignment = 0;
@@ -217,12 +264,6 @@ public class State
 		}
 
 		return leastConstrainingValues;
-	}
-
-	public State(int numOfNumbers)
-	{
-		this.numOfNumbers = numOfNumbers;
-		this.board = new Grid(numOfNumbers);
 	}
 
 	public boolean unassignedVariableHasAnEmptyDomain()
