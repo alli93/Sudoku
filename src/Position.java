@@ -38,4 +38,12 @@ public class Position
 		}
 		return true;
 	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuffer pos = new StringBuffer();
+		pos.append(row + " " + column);
+		return (pos.toString());
+	}
 }
