@@ -21,7 +21,8 @@ public class State
 		{
 			for (int j = 0; j < oldstate.numOfNumbers; j++)
 			{
-				newState.board.grid.get(i).set(j, oldstate.board.grid.get(i).get(j).newInstance(oldstate.board.grid.get(i).get(j)));
+				newState.board.grid.get(i).set(j,
+						oldstate.board.grid.get(i).get(j).newInstance(oldstate.board.grid.get(i).get(j)));
 			}
 		}
 		newState.numOfNumbers = oldstate.numOfNumbers;
@@ -55,14 +56,14 @@ public class State
 			{
 				Variable newVariable = new Variable();
 				newVariable.validAssignments.clear();
-				
+
 				newVariable.assignment = oldVariable.assignment;
 				for (int i = 0; i < oldVariable.validAssignments.size(); i++)
 				{
 					int currenAssignment = oldVariable.validAssignments.get(i);
 					newVariable.validAssignments.add(currenAssignment);
 				}
-				
+
 				return newVariable;
 			}
 
@@ -287,6 +288,97 @@ public class State
 	public boolean isGoalState()
 	{
 		return numOfAssignedVariables == (numOfNumbers * numOfNumbers);
+	}
+
+	public boolean checkSolution(State solution)
+	{
+		if (!isGoalState())
+		{
+			return false;
+		}
+
+		ArrayList<Integer> numbersSeen = new ArrayList<Integer>();
+
+		// Check that there is a unique variable in each row
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			numbersSeen.clear();
+			// Add each variable in the row to numbersSeen
+			for (int j = 0; j < this.numOfNumbers; j++)
+			{
+				numbersSeen.add(new Integer(board.grid.get(i).get(j).assignment));
+			}
+
+			// Check that each variable seen in row is unique
+			for (int j = 1; j <= this.numOfNumbers; j++)
+			{
+				if (!numbersSeen.contains(new Integer(j)))
+				{
+					return false;
+				}
+			}
+		}
+
+		// Check that there is a unique variable in each column
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			numbersSeen.clear();
+			// Add each variable in the column to numbersSeen
+			for (int j = 0; j < this.numOfNumbers; j++)
+			{
+				numbersSeen.add(new Integer(board.grid.get(j).get(i).assignment));
+			}
+
+			// Check that each variable seen in column is unique
+			for (int j = 1; j <= this.numOfNumbers; j++)
+			{
+				if (!numbersSeen.contains(new Integer(j)))
+				{
+					return false;
+				}
+			}
+		}
+
+		// Check if the subgrid already contains the number
+		int numOfRowsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int numOfColumnsInSubgrid = (int) Math.sqrt((double) this.numOfNumbers);
+		int currentRow = 0;
+		int currentColumn = 0;
+		int numOfSubgridsCheckedInRow = 0;
+
+		// Go through each subgrid
+		for (int i = 0; i < this.numOfNumbers; i++)
+		{
+			if (numOfSubgridsCheckedInRow == numOfRowsInSubgrid)
+			{
+				currentRow += numOfRowsInSubgrid;
+				numOfSubgridsCheckedInRow = 0;
+			}
+			numbersSeen.clear();
+			// Add each variable in the subgrid to numbersSeen
+			for (int j = 0; j < numOfRowsInSubgrid; j++)
+			{
+				for (int k = 0; k < numOfColumnsInSubgrid; k++)
+				{
+					numbersSeen.add(new Integer(board.grid.get(j + currentRow).get(k + currentColumn).assignment));
+				}
+			}
+
+			// Check that each variable seen in subgrid is unique
+			for (int j = 1; j <= this.numOfNumbers; j++)
+			{
+				if (!numbersSeen.contains(new Integer(j)))
+				{
+					return false;
+				}
+			}
+			
+			currentColumn += numOfColumnsInSubgrid;
+			currentColumn = currentColumn % this.numOfNumbers;
+			numOfSubgridsCheckedInRow++;
+		}
+
+		return true;
 	}
 
 	@Override

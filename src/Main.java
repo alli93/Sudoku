@@ -13,6 +13,7 @@ public class Main
 		System.out.println("1 - 4x4 puzzle - Hard");
 		System.out.println("2 - 9x9 puzzle - Easy");
 		System.out.println("3 - 9x9 puzzle - Evil");
+		System.out.println("4 - 16x16 puzzle - Evil");
 		puzzleNumber = in.nextInt();
 
 		agent.setPuzzleNumber(puzzleNumber);
@@ -20,7 +21,7 @@ public class Main
 
 		long startTime = System.currentTimeMillis();
 		State solution = agent.solvePuzzle();
-		if (solution.isGoalState())
+		if (solution.isGoalState() && solution.checkSolution(solution))
 		{
 			System.out.println("Solution:");
 			System.out.println(solution);
