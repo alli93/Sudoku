@@ -20,7 +20,7 @@ public class Main
 
 		long startTime = System.currentTimeMillis();
 		State solution = agent.solvePuzzle();
-		if (solution.isGoalState())
+		if (solution.isGoalState() && solution.checkSolution(solution))
 		{
 			System.out.println("Solution:");
 			System.out.println(solution);
